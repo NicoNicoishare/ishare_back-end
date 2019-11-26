@@ -252,13 +252,27 @@ class PostsAPI(generics.ListCreateAPIView):
 
 	def get(self, request, format=None):
 		try:
-			user = request.user
-			userlist = [user.id]
-			likeList = FollowsLink.objects.filter(From = user)
-			for like in likeList:
-				userlist.append(like.To.id)
-			userlist = list(set(userlist))
-			postList = Posts.objects.filter(user__in=userlist).order_by('-Pub_time')
+			# 新增代码
+			# 是否搜索热门
+			isPopular = request.GET.get("isPopular", False)
+			# 是否进行文本搜索
+			isSearch = request.GET.get("isSearch", False)
+
+			# 原代码
+			if isPopular:
+				postList = Posts.objects.all().order_by('likes_num')
+			elif isSearch:
+				searchText = request.GET.get("searchText", '')
+				postList = Posts.objects.filter(introduction__contains=searchText)
+			else:
+				user = request.user
+				userlist = [user.id]
+				likeList = FollowsLink.objects.filter(From = user)
+				for like in likeList:
+					userlist.append(like.To.id)
+				userlist = list(set(userlist))
+				postList = Posts.objects.filter(user__in=userlist).order_by('-Pub_time')
+
 			postIDList = []
 			for post in postList:
 				postIDList.append(post.id)
@@ -844,6 +858,7 @@ class FollowPerson(APIView):
 				return Response({'status':'null'})
 		except:
 			return Response({'status':'UnknownError'})
+
 
 class ToPerson(APIView):
 	"""15"""

@@ -156,7 +156,6 @@ class FollowsLink(models.Model):
     def __str__(self):
         return self.From.__str__() + '关注' + self.To.__str__()
 
-
 class Keys(models.Model):
     publicKey = models.CharField(max_length=250)
     privateKey = models.CharField(max_length=900)

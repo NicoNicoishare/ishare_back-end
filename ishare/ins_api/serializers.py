@@ -2,7 +2,6 @@ from rest_framework import serializers
 from users.models import User
 from .models import Posts, Photos, Comments, LikesLink
 
-# 用于Restful框架风格的序列化类
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>接口申请</title>
+</head>
+<body>
+	<form method="post" action=".">
+邮箱：<input type="text" name="email"><br>
+姓名：<input type="text" name="name"><br>
+验证码：<input type="hidden" name="captcha_0" id="id_captcha_0" value="{{hashkey}}">
+	<input   id="id_captcha_1" name="captcha_1" type="text">
+						<img src="{{ image_url }}" id="id_img_1" alt="captcha" />
+<br>
+<input type="submit" value="申请">
+
+						</form>
+
+						{% if message %}
+						<script>alert('{{message}}')</script>
+						{% endif %}
+</body>
+</html>
