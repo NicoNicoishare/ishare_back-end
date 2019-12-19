@@ -981,6 +981,8 @@ class MessageList(APIView):
 		result = []
 		for message in messages:
 			if type(message) == FollowsLink:
+				if user.id == message.From.id:
+					continue
 				if FollowsLink.objects.filter(From=request.user,To=message.From):
 					is_guanzhu = True
 				else:
@@ -995,6 +997,8 @@ class MessageList(APIView):
 				serializer = Message_1Serializer(message.kwargs)
 				result.append(serializer.data)
 			if type(message) == LikesLink:
+				if user.id == message.user.id:
+					continue
 				message = Message(user_id=message.user.id,
 								  username=message.user.username,
 								  profile_picture=message.user.profile_picture,
@@ -1008,6 +1012,8 @@ class MessageList(APIView):
 				serializer = Message_2Serializer(message.kwargs)
 				result.append(serializer.data)
 			if type(message) == Comments:
+				if user.id == message.user.id:
+					continue
 				message = Message(user_id=message.user.id,
 								  username=message.user.username,
 								  profile_picture=message.user.profile_picture,
