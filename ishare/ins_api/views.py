@@ -251,7 +251,7 @@ class PostsAPI(generics.ListCreateAPIView):
 	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, format=None):
-		try:
+		# try:
 			# 新增代码
 			# 是否搜索热门
 			isPopular = request.GET.get("isPopular", False)
@@ -260,10 +260,16 @@ class PostsAPI(generics.ListCreateAPIView):
 
 			# 原代码
 			if isPopular:
-				postList = Posts.objects.all().order_by('likes_num')
+				postList = Posts.objects.all().order_by('-likes_num')
+				page = int(request.GET['page'])
+
+				postList = postList[(page - 1) * 5: page * 5]
 			elif isSearch:
 				searchText = request.GET.get("searchText", '')
 				postList = Posts.objects.filter(introduction__contains=searchText)
+				page = int(request.GET['page'])
+
+				postList = postList[ (page-1)*5: page * 5]
 			else:
 				user = request.user
 				userlist = [user.id]
@@ -273,27 +279,33 @@ class PostsAPI(generics.ListCreateAPIView):
 				userlist = list(set(userlist))
 				postList = Posts.objects.filter(user__in=userlist).order_by('-Pub_time')
 
-			postIDList = []
-			for post in postList:
-				postIDList.append(post.id)
+				postIDList = []
+				for post in postList:
+					postIDList.append(post.
+									  id)
 
-			page = int(request.GET['page'])
-			posts = []
-			if page == 1:
-				postIDList = postIDList[:5]
-				postList = Posts.objects.filter(id__in=postIDList).order_by('-Pub_time')
-			else:
-				post_id = int(request.GET['post_id'])
-				postIDList_2 = []
-				for postID in postIDList:
-					if postID < post_id:
-						postIDList_2.append(postID)
-				postIDList = postIDList_2[:5]
-				if not postIDList:
-					return Response({'status':'null'})
-				postList = Posts.objects.filter(id__in=postIDList).order_by('-Pub_time')
+				page = int(request.GET['page'])
+
+				if page == 1:
+					postIDList = postIDList[:5]
+					postList = Posts.objects.filter(id__in=postIDList).order_by('-Pub_time')
+				else:
+					post_id = int(request.GET['post_id'])
+					postIDList_2 = []
+					for postID in postIDList:
+						if postID < post_id:
+							postIDList_2.append(postID)
+					postIDList = postIDList_2[:5]
+					if not postIDList:
+						return Response({'status':'null'})
+					postList = Posts.objects.filter(id__in=postIDList).order_by('-Pub_time')
+
+
+			# 根据上面得到的postList 进行生成返回数据
 			photos = []
 			photoList = []
+
+			posts = []
 			for post in postList:
 				album = Photos.objects.filter(post=post)
 				for photo in album:
@@ -336,8 +348,8 @@ class PostsAPI(generics.ListCreateAPIView):
 										   })
 			serializer = BriefPostSerializer(posts,many=True)
 			return Response({'status':'Success','result':serializer.data,'photoList':photoList})
-		except:
-			return Response({'status':'UnknownError'})
+		# except:
+		# 	return Response({'status':'UnknownError'})
 
 	def post(self, request, format=None):
 		data = request.data
