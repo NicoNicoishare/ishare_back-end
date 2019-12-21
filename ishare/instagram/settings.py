@@ -104,22 +104,22 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'instagram', #os.path.join(BASE_DIR, 'db.sqlite3'),
-    #     'USER': 'It_team',
-    #     'PASSWORD': '01edfDJoe78',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '3306',
-    # }
-    'default':{
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': "sqlite3.db",
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'instagram', #os.path.join(BASE_DIR, 'db.sqlite3'),
+        'USER': 'It_team',
+        'PASSWORD': '01edfDJoe78',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
+    # 'default':{
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': "sqlite3.db",
+    #     'USER': '',
+    #     'PASSWORD': '',
+    #     'HOST': '',
+    #     'PORT': '',
+    # }
 }
 
 

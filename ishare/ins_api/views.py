@@ -260,16 +260,47 @@ class PostsAPI(generics.ListCreateAPIView):
 
 			# 原代码
 			if isPopular:
-				postList = Posts.objects.all().order_by('-likes_num')
+				# 获取参数
 				page = int(request.GET['page'])
+				alreadyGetIdList = request.GET.get('idlist', '')
+				alreadyGetIdList = alreadyGetIdList.split(' ')
 
-				postList = postList[(page - 1) * 5: page * 5]
+				# 去除空格和空字符串，并全部转换为int
+				while alreadyGetIdList.count(' '):
+					alreadyGetIdList.remove(' ')
+				while alreadyGetIdList.count(''):
+					alreadyGetIdList.remove('')
+				for i in alreadyGetIdList:
+					i = int(i)
+				# 获取除了给定id以外的热门
+				postList = Posts.objects\
+					.exclude(id__in = alreadyGetIdList)\
+					.order_by('-likes_num')
+
+				postList = postList[:5]
+
 			elif isSearch:
+				# 获取参数
+				# page = int(request.GET['page'])
+				alreadyGetIdList = request.GET.get('idlist', '')
+				alreadyGetIdList = alreadyGetIdList.split(' ')
 				searchText = request.GET.get("searchText", '')
-				postList = Posts.objects.filter(introduction__contains=searchText)
-				page = int(request.GET['page'])
 
-				postList = postList[ (page-1)*5: page * 5]
+				# 去除空格和空字符串，并全部转换为int
+				while alreadyGetIdList.count(' '):
+					alreadyGetIdList.remove(' ')
+				while alreadyGetIdList.count(''):
+					alreadyGetIdList.remove('')
+				for i in alreadyGetIdList:
+					i = int(i)
+				# 获取除了给定id以外的热门
+				postList = Posts.objects \
+					.exclude(id__in=alreadyGetIdList) \
+					.order_by('-likes_num')\
+					.filter(introduction__contains=searchText)
+
+
+				postList = postList[:5]
 			else:
 				user = request.user
 				userlist = [user.id]

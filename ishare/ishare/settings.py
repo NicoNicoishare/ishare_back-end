@@ -106,7 +106,7 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'instagram', #os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'instagram',  # os.path.join(BASE_DIR, 'db.sqlite3'),
         'USER': 'It_team',
         'PASSWORD': '01edfDJoe78',
         'HOST': '127.0.0.1',
