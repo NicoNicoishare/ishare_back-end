@@ -261,7 +261,7 @@ class PostsAPI(generics.ListCreateAPIView):
 			# 原代码
 			if isPopular:
 				# 获取参数
-				page = int(request.GET['page'])
+				# page = int(request.GET['page'])
 				alreadyGetIdList = request.GET.get('idlist', '')
 				alreadyGetIdList = alreadyGetIdList.split(' ')
 
